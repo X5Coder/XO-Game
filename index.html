@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>XO</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -10,91 +10,150 @@
   --bg: #0A0A0A; --surface: #111111; --surface-2: #1E1E1E;
   --border: #2A2A2A; --border-2: #2E2E2E;
   --text: #FFFFFF; --text-dim: #8A8A8A; --text-faint: #555555;
-  --gold: #F0C850; --red: #B91C1C; --green: #22C55E;
+  --gold: #F0C850; --red: #B91C1C;
 }
 html, body {
-  height: 100%; background: var(--bg); color: var(--text);
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  overflow: hidden; user-select: none; overscroll-behavior: none;
-  position: fixed; inset: 0; width: 100%;
+  overflow: hidden;
+  user-select: none;
+  overscroll-behavior: none;
+  position: fixed;
+  inset: 0;
+  width: 100%;
 }
-body { display: flex; flex-direction: column; align-items: center; padding: 14px; }
-.hidden { display: none !important; }
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px;
+}
 
 #toolbar {
-  width: min(92vw, 420px); margin-bottom: 14px; padding: 10px 14px;
-  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-shrink: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  width: min(92vw, 420px);
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
-#toolbar .brand { display: flex; align-items: center; flex: 1; min-width: 0; }
-#toolbar .brand svg { height: 22px; width: auto; display: block; }
+
+#toolbar .brand {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+#toolbar .brand svg {
+  height: 22px;
+  width: auto;
+  display: block;
+}
+
 #toolbar .settings-btn {
-  width: 34px; height: 34px; background: var(--surface-2);
-  border: 1px solid var(--border-2); color: var(--text-dim);
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  border-radius: 10px; transition: all 0.15s; padding: 0; flex-shrink: 0; position: relative;
+  width: 34px;
+  height: 34px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  color: var(--text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  transition: all 0.15s;
+  padding: 0;
+  flex-shrink: 0;
 }
 #toolbar .settings-btn:hover { background: #252525; color: var(--text); }
 #toolbar .settings-btn:active { transform: scale(0.92); }
 #toolbar .settings-btn svg { width: 17px; height: 17px; display: block; }
-#toolbar .settings-btn.has-invite::after {
-  content: ''; position: absolute; top: 4px; right: 4px;
-  width: 8px; height: 8px; background: var(--gold);
-  border-radius: 50%; box-shadow: 0 0 0 2px var(--surface);
-  animation: inviteDot 1.2s ease-in-out infinite;
-}
-@keyframes inviteDot {
-  0%,100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.3); opacity: 0.6; }
-}
 
 #stats {
-  width: min(92vw, 420px); margin-bottom: 16px; background: var(--surface);
-  border: 1px solid var(--border); border-radius: 16px;
-  display: flex; align-items: stretch; padding: 14px 0;
-  flex-shrink: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  width: min(92vw, 420px);
+  margin-bottom: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  display: flex;
+  align-items: stretch;
+  padding: 14px 0;
+  flex-shrink: 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
-.stat { flex: 1; display: grid; grid-template-rows: auto auto; justify-items: center; align-items: center; gap: 6px; min-width: 0; }
+
+.stat {
+  flex: 1;
+  display: grid;
+  grid-template-rows: auto auto;
+  justify-items: center;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
 .stat .count {
-  font-size: 26px; font-weight: 900; font-variant-numeric: tabular-nums;
-  line-height: 1; text-align: center; display: block; width: 100%; direction: ltr;
+  font-size: 26px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  text-align: center;
+  display: block;
+  width: 100%;
+  direction: ltr;
 }
-.stat.win .count { color: var(--gold); }
+.stat.win  .count { color: var(--gold); }
 .stat.loss .count { color: var(--red); }
 .stat.draw .count { color: var(--text); }
+
 .stat .label {
-  font-size: 10px; font-weight: 800; letter-spacing: 2.5px; padding-left: 2.5px;
-  color: var(--text-faint); text-transform: uppercase; text-align: center;
-  display: block; width: 100%; direction: ltr; line-height: 1;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  padding-left: 2.5px;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  text-align: center;
+  display: block;
+  width: 100%;
+  direction: ltr;
+  line-height: 1;
 }
+
 .stat.pulse .count { animation: pulseCount 0.35s ease-out; }
 @keyframes pulseCount { 0%,100%{transform:scale(1)} 50%{transform:scale(1.3)} }
-.stat-divider { width: 1px; background: var(--border); margin: 6px 0; align-self: stretch; flex-shrink: 0; }
 
-#online-player-bar {
-  width: min(92vw, 420px); margin-bottom: 16px; background: var(--surface);
-  border: 1px solid var(--border); border-radius: 16px;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 16px; flex-shrink: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  gap: 8px;
+.stat-divider {
+  width: 1px;
+  background: var(--border);
+  margin: 6px 0;
+  align-self: stretch;
+  flex-shrink: 0;
 }
-.pb-side { display: flex; flex-direction: column; align-items: center; gap: 3px; flex: 1; min-width: 0; }
-.pb-name { font-size: 12px; font-weight: 800; color: var(--text); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.pb-sym { font-size: 10px; font-weight: 800; letter-spacing: 2px; color: var(--text-faint); }
-.pb-side.p1 .pb-sym { color: var(--gold); }
-.pb-side.p2 .pb-sym { color: var(--text); }
-.pb-side.you .pb-name { color: var(--gold); }
-.pb-center { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 0 6px; }
-.pb-score { font-size: 15px; font-weight: 900; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: 1px; direction: ltr; }
-.pb-score-label { font-size: 8px; font-weight: 800; letter-spacing: 1.5px; color: var(--text-faint); text-transform: uppercase; }
 
 #game {
-  width: min(92vw, 420px); aspect-ratio: 1/1; display: grid;
-  grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
-  gap: 12px; padding: 12px; background: var(--surface); border-radius: 24px;
-  border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-  position: relative; transform: translateZ(0); flex-shrink: 0;
+  width: min(92vw, 420px);
+  aspect-ratio: 1/1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 12px;
+  padding: 12px;
+  background: var(--surface);
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  position: relative;
+  transform: translateZ(0);
+  flex-shrink: 0;
 }
 .cell {
   background: var(--surface-2); border-radius: 16px; cursor: pointer;
@@ -104,6 +163,7 @@ body { display: flex; flex-direction: column; align-items: center; padding: 14px
 .cell:not(.taken):hover { background: #252525; }
 .cell:not(.taken):active { background: #2a2a2a; }
 .cell.taken { cursor: default; }
+
 .cell .mark {
   width: 62%; height: 62%; display: flex; align-items: center; justify-content: center;
   transform-origin: center; animation: markIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) both;
@@ -114,8 +174,11 @@ body { display: flex; flex-direction: column; align-items: center; padding: 14px
 .cell.o .mark svg circle { stroke: var(--text); stroke-width: 10; fill: none; }
 .cell.win { background: rgba(240, 200, 80, 0.1) !important; }
 .cell.last { background: #252525; }
+
 #game.ai-turn .cell:not(.taken) { animation: idlePulse 1.6s ease-in-out infinite; }
-@keyframes idlePulse { 0%,100%{ background: var(--surface-2); } 50%{ background: #1a1a1a; } }
+@keyframes idlePulse {
+  0%,100%{ background: var(--surface-2); } 50%{ background: #1a1a1a; }
+}
 
 #win-line {
   position: absolute; inset: 0; pointer-events: none; z-index: 10;
@@ -123,236 +186,75 @@ body { display: flex; flex-direction: column; align-items: center; padding: 14px
 }
 #win-line.show { opacity: 1; }
 #win-line line {
-  stroke: var(--gold); stroke-width: 2.5; stroke-linecap: round;
-  stroke-dasharray: 500; stroke-dashoffset: 500;
+  stroke: var(--gold);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 500;
+  stroke-dashoffset: 500;
 }
 #win-line.show line { animation: drawLine 0.3s ease-out forwards; }
 @keyframes drawLine { to { stroke-dashoffset: 0; } }
 
-.cell.cell-out { animation: cellOut 0.18s ease-in forwards; pointer-events: none; }
+.cell.cell-out {
+  animation: cellOut 0.18s ease-in forwards;
+  pointer-events: none;
+}
 @keyframes cellOut {
   from { opacity: 1; transform: scale(1); }
   to   { opacity: 0; transform: scale(0.6); }
 }
-.cell.cell-in { animation: cellIn 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+.cell.cell-in {
+  animation: cellIn 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
 @keyframes cellIn {
   from { opacity: 0; transform: scale(0.6); }
   to   { opacity: 1; transform: scale(1); }
 }
 
-.overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+#settings-modal {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7);
   display: flex; align-items: center; justify-content: center;
-  z-index: 100; padding: 20px; opacity: 0; pointer-events: none;
-  transition: opacity 0.2s; backdrop-filter: blur(2px);
+  z-index: 100; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.2s;
 }
-.overlay.show { opacity: 1; pointer-events: auto; }
-
+#settings-modal.show { opacity: 1; pointer-events: auto; }
 .settings-panel {
-  background: #0C0C0C; border: 1px solid var(--border-2); border-radius: 20px;
-  padding: 20px; width: 100%; max-width: 380px; max-height: 88vh; overflow-y: auto;
+  background: #0C0C0C; border: 1px solid var(--border-2); border-radius: 16px;
+  padding: 24px; width: 100%; max-width: 340px;
   transform: scale(0.9); transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-  scrollbar-width: thin; scrollbar-color: var(--border-2) transparent;
 }
-.settings-panel::-webkit-scrollbar { width: 4px; }
-.settings-panel::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 4px; }
 #settings-modal.show .settings-panel { transform: scale(1); }
-.settings-panel h2 { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 16px; letter-spacing: 1px; }
-
-.user-card {
-  display: flex; align-items: center; gap: 12px;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 14px; padding: 12px 14px; margin-bottom: 14px;
-}
-.user-avatar {
-  width: 42px; height: 42px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--gold), #B8860B);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; font-weight: 900; color: #000; flex-shrink: 0;
-}
-.user-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
-.user-name {
-  font-size: 14px; font-weight: 800; color: var(--text);
-  cursor: pointer; padding: 2px 4px; border-radius: 6px;
-  transition: background 0.15s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  display: flex; align-items: center; gap: 5px;
-}
-.user-name:hover { background: var(--surface-2); }
-.user-name .edit-ico { opacity: 0.5; font-size: 11px; }
-.user-name-input {
-  font-size: 14px; font-weight: 800; color: var(--text); background: var(--surface-2);
-  border: 1px solid var(--gold); border-radius: 6px; padding: 3px 6px;
-  font-family: inherit; outline: none; width: 100%;
-}
-.user-id {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: 14px; font-weight: 900; color: var(--text);
-  font-variant-numeric: tabular-nums; letter-spacing: 4px; direction: ltr;
-  cursor: pointer; padding: 4px 10px; border-radius: 6px;
-  transition: background 0.15s; align-self: flex-start;
-  background: var(--surface-2); border: 1px solid var(--border);
-  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
-}
-.user-id:hover { background: #252525; }
-.user-id svg { width: 11px; height: 11px; }
-.user-id.copied { color: var(--green); border-color: var(--green); }
-
-.section { margin-bottom: 14px; }
-.section-title {
-  font-size: 10px; font-weight: 800; letter-spacing: 2.5px;
-  color: var(--text-faint); text-transform: uppercase;
-  margin-bottom: 8px; padding: 0 2px;
-}
-
-.challenge-row { display: flex; gap: 8px; }
-.challenge-row input {
-  flex: 1; min-width: 0; background: var(--surface);
-  border: 1px solid var(--border); border-radius: 12px;
-  padding: 12px 14px; color: var(--text);
-  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
-  font-size: 18px; font-weight: 900;
-  outline: none; transition: border-color 0.15s;
-  direction: ltr; text-align: center; letter-spacing: 8px;
-}
-.challenge-row input:focus { border-color: var(--gold); }
-.challenge-row input::placeholder {
-  color: var(--text-faint); font-weight: 600;
-  letter-spacing: 1px; font-family: inherit; font-size: 13px;
-}
-.challenge-row button {
-  padding: 12px 22px;
-  background: linear-gradient(135deg, var(--gold), #D4A017);
-  border: none; border-radius: 12px; color: #0A0A0A;
-  font-family: inherit; font-size: 15px;
-  font-weight: 900; letter-spacing: 1.5px;
-  cursor: pointer; white-space: nowrap;
-  transition: transform 0.12s, box-shadow 0.15s, opacity 0.15s;
-  box-shadow: 0 4px 14px rgba(240, 200, 80, 0.25);
-  text-transform: uppercase;
-}
-.challenge-row button:hover { box-shadow: 0 6px 18px rgba(240, 200, 80, 0.4); }
-.challenge-row button:active { transform: scale(0.95); }
-.challenge-row button:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
-
-.waiting-box {
-  display: flex; align-items: center; gap: 10px;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 12px 14px;
-}
-.waiting-box .spinner {
-  width: 16px; height: 16px; border: 2px solid var(--border-2);
-  border-top-color: var(--gold); border-radius: 50%;
-  animation: spin 0.8s linear infinite; flex-shrink: 0;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.waiting-box .msg { flex: 1; font-size: 12px; font-weight: 700; color: var(--text-dim); }
-.waiting-box .msg strong { color: var(--gold); }
-.waiting-box button {
-  padding: 7px 14px; background: var(--surface-2); border: 1px solid var(--border-2);
-  border-radius: 8px; color: var(--red); font-family: inherit; font-size: 11px;
-  font-weight: 800; cursor: pointer; letter-spacing: 1px;
-}
-
-.room-status {
-  display: flex; align-items: center; justify-content: space-between;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 12px 14px;
-}
-.room-status .txt { font-size: 12px; font-weight: 700; color: var(--text-dim); display: flex; align-items: center; gap: 8px; }
-.room-status .txt strong { color: var(--gold); letter-spacing: 2px; direction: ltr; font-size: 13px; }
-.room-status .dot {
-  width: 7px; height: 7px; border-radius: 50%; background: var(--green);
-  animation: blink 1.5s ease-in-out infinite; flex-shrink: 0;
-}
-@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
-.room-status button {
-  padding: 7px 14px; background: var(--surface-2); border: 1px solid var(--border-2);
-  border-radius: 8px; color: var(--red); font-family: inherit; font-size: 11px;
-  font-weight: 800; cursor: pointer; letter-spacing: 1px; transition: background 0.15s;
-}
-.room-status button:hover { background: rgba(185, 28, 28, 0.15); }
-
-.reset-btn {
-  width: 100%; margin-top: 6px; padding: 12px;
-  background: rgba(185, 28, 28, 0.1); border: 1px solid rgba(185, 28, 28, 0.4);
-  border-radius: 10px; color: var(--red); font-family: inherit;
-  font-size: 13px; font-weight: 800; cursor: pointer;
+.settings-panel h2 { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 20px; letter-spacing: 1px; }
+.settings-panel .row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.settings-panel .row:last-child { border-bottom: none; }
+.settings-panel .row label { font-size: 14px; color: var(--text-dim); }
+.settings-panel .row .val { font-size: 14px; font-weight: 700; color: var(--text); }
+.settings-panel button {
+  width: 100%; margin-top: 20px; padding: 12px; background: var(--surface-2);
+  border: 1px solid var(--border-2); border-radius: 10px; color: var(--text);
+  font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
   letter-spacing: 1px; transition: background 0.15s;
 }
-.reset-btn:hover { background: rgba(185, 28, 28, 0.2); }
-.reset-btn:active { transform: scale(0.98); }
-
-.invite-card {
-  background: #0C0C0C; border: 1px solid var(--gold);
-  border-radius: 20px; padding: 24px 20px; width: 100%; max-width: 320px;
-  text-align: center;
-  transform: scale(0.7) translateY(-20px);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 0 40px rgba(240, 200, 80, 0.15);
-}
-#invite-modal.show .invite-card { transform: scale(1) translateY(0); }
-.invite-icon {
-  width: 56px; height: 56px; margin: 0 auto 12px;
-  background: rgba(240, 200, 80, 0.12); border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 26px; animation: invitePulse 1.4s ease-in-out infinite;
-}
-@keyframes invitePulse {
-  0%,100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(240,200,80,0.4); }
-  50% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(240,200,80,0); }
-}
-.invite-text { font-size: 13px; color: var(--text-dim); margin-bottom: 18px; line-height: 1.6; }
-.invite-text strong { display: block; font-size: 17px; font-weight: 900; color: var(--text); margin-bottom: 4px; letter-spacing: 0.5px; }
-.invite-actions { display: flex; gap: 10px; }
-.invite-actions button {
-  flex: 1; padding: 11px; border-radius: 10px; font-family: inherit;
-  font-size: 13px; font-weight: 800; cursor: pointer; letter-spacing: 1px;
-  border: none; transition: transform 0.15s, opacity 0.15s;
-}
-.invite-actions button:active { transform: scale(0.95); }
-#invite-accept { background: var(--gold); color: #000; }
-#invite-accept:hover { opacity: 0.9; }
-#invite-reject { background: var(--surface-2); color: var(--text-dim); border: 1px solid var(--border-2); }
-#invite-reject:hover { background: #252525; color: var(--text); }
-
-.confirm-card {
-  background: #0C0C0C; border: 1px solid var(--border-2);
-  border-radius: 18px; padding: 22px 20px; width: 100%; max-width: 300px;
-  text-align: center; transform: scale(0.9);
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-#confirm-modal.show .confirm-card { transform: scale(1); }
-.confirm-card.shake { animation: shakeAnim 0.4s ease-out; }
-@keyframes shakeAnim {
-  0%,100% { transform: scale(1) translateX(0); }
-  20% { transform: scale(1) translateX(-8px); }
-  40% { transform: scale(1) translateX(8px); }
-  60% { transform: scale(1) translateX(-6px); }
-  80% { transform: scale(1) translateX(6px); }
-}
-.confirm-icon { font-size: 32px; margin-bottom: 10px; }
-.confirm-text { font-size: 13px; color: var(--text-dim); line-height: 1.6; margin-bottom: 18px; }
-.confirm-text strong { display: block; color: var(--text); font-size: 14px; font-weight: 800; margin-bottom: 4px; }
-.confirm-actions { display: flex; gap: 10px; }
-.confirm-actions button {
-  flex: 1; padding: 11px; border-radius: 10px; font-family: inherit;
-  font-size: 13px; font-weight: 800; cursor: pointer; letter-spacing: 1px;
-  border: none; transition: transform 0.15s, opacity 0.15s;
-}
-.confirm-actions button:active { transform: scale(0.95); }
-#confirm-yes { background: var(--red); color: #fff; }
-#confirm-yes:hover { opacity: 0.9; }
-#confirm-no { background: var(--surface-2); color: var(--text); border: 1px solid var(--border-2); }
-#confirm-no:hover { background: #252525; }
+.settings-panel button:hover { background: #252525; }
+.settings-panel button:active { transform: scale(0.98); }
 
 #turn-badge {
-  position: fixed; bottom: 20px; left: 50%;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
   transform: translateX(-50%) scale(1);
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 20px; padding: 8px 18px;
-  font-size: 12px; font-weight: 800; letter-spacing: 2.5px;
-  color: var(--text-dim); display: none; z-index: 50; opacity: 1;
-  white-space: nowrap; will-change: transform, opacity;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 8px 18px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  color: var(--text-dim);
+  display: none;
+  z-index: 50;
+  opacity: 1;
+  white-space: nowrap;
+  will-change: transform, opacity;
 }
 #turn-badge.show { display: block; }
 #turn-badge.you { color: var(--gold); border-color: var(--gold); }
@@ -362,20 +264,6 @@ body { display: flex; flex-direction: column; align-items: center; padding: 14px
   70%  { transform: translateX(-50%) scale(1.08); opacity: 1; }
   100% { transform: translateX(-50%) scale(1); opacity: 1; }
 }
-
-#toast {
-  position: fixed; top: 20px; left: 50%;
-  transform: translateX(-50%) translateY(-30px);
-  background: var(--surface-2); border: 1px solid var(--border-2);
-  border-radius: 12px; padding: 10px 18px;
-  font-size: 12px; font-weight: 700; color: var(--text);
-  letter-spacing: 0.5px; z-index: 200; opacity: 0;
-  pointer-events: none; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-  white-space: nowrap; box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-}
-#toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-#toast.error { border-color: rgba(185,28,28,0.5); color: #FCA5A5; }
-#toast.success { border-color: rgba(34,197,94,0.5); color: #86EFAC; }
 </style>
 </head>
 <body>
@@ -397,25 +285,19 @@ body { display: flex; flex-direction: column; align-items: center; padding: 14px
 </div>
 
 <div id="stats">
-  <div class="stat win" id="s-win"><div class="count" id="count-win">0</div><div class="label">WIN</div></div>
-  <div class="stat-divider"></div>
-  <div class="stat draw" id="s-draw"><div class="count" id="count-draw">0</div><div class="label">DRAW</div></div>
-  <div class="stat-divider"></div>
-  <div class="stat loss" id="s-loss"><div class="count" id="count-loss">0</div><div class="label">LOSS</div></div>
-</div>
-
-<div id="online-player-bar" class="hidden">
-  <div class="pb-side p1" id="pb-p1">
-    <div class="pb-name" id="pb-p1-name">—</div>
-    <div class="pb-sym">X</div>
+  <div class="stat win" id="s-win">
+    <div class="count" id="count-win">0</div>
+    <div class="label">WIN</div>
   </div>
-  <div class="pb-center">
-    <div class="pb-score" id="pb-score">0 - 0 - 0</div>
-    <div class="pb-score-label">W · D · L</div>
+  <div class="stat-divider"></div>
+  <div class="stat draw" id="s-draw">
+    <div class="count" id="count-draw">0</div>
+    <div class="label">DRAW</div>
   </div>
-  <div class="pb-side p2" id="pb-p2">
-    <div class="pb-name" id="pb-p2-name">—</div>
-    <div class="pb-sym">O</div>
+  <div class="stat-divider"></div>
+  <div class="stat loss" id="s-loss">
+    <div class="count" id="count-loss">0</div>
+    <div class="label">LOSS</div>
   </div>
 </div>
 
@@ -427,284 +309,49 @@ body { display: flex; flex-direction: column; align-items: center; padding: 14px
 
 <div id="turn-badge">YOUR TURN</div>
 
-<div class="overlay" id="settings-modal">
+<div id="settings-modal">
   <div class="settings-panel">
     <h2>الإعدادات</h2>
-
-    <div class="user-card">
-      <div class="user-avatar" id="user-avatar">?</div>
-      <div class="user-info">
-        <div class="user-name" id="user-name-display">
-          <span id="user-name-text">...</span>
-          <span class="edit-ico">✎</span>
-        </div>
-        <div class="user-id" id="user-id-display" title="نسخ ID">
-          <span id="user-id-text">—</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-          </svg>
-        </div>
-      </div>
-    </div>
-
-    <div class="section" id="challenge-section">
-      <div class="section-title">تحدي مستخدم</div>
-      <div id="challenge-idle">
-        <div class="challenge-row">
-          <input type="text" id="challenge-id-input" placeholder="12345" maxlength="5" inputmode="numeric" />
-          <button id="send-challenge-btn">تحدي</button>
-        </div>
-      </div>
-      <div id="challenge-waiting" class="hidden">
-        <div class="waiting-box">
-          <div class="spinner"></div>
-          <div class="msg">في انتظار <strong id="challenge-target-name">—</strong>...</div>
-          <button id="cancel-challenge-btn">إلغاء</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="section" id="in-room-section" style="display:none;">
-      <div class="section-title">أنت داخل غرفة</div>
-      <div class="room-status">
-        <div class="txt">
-          <span class="dot"></span>
-          <span>غرفة: <strong id="room-id-label">—</strong></span>
-        </div>
-        <button id="leave-room-btn">خروج</button>
-      </div>
-    </div>
-
-    <button class="reset-btn" id="reset-scores">تصفير النتائج</button>
+    <div class="row"><label>الذاكرة</label><span class="val" id="setting-states">—</span></div>
+    <div class="row"><label>عدد الألعاب</label><span class="val" id="setting-games">—</span></div>
+    <div class="row"><label>الحالة</label><span class="val" id="setting-status">—</span></div>
+    <button id="reset-scores">تصفير النتائج</button>
   </div>
 </div>
-
-<div class="overlay" id="invite-modal">
-  <div class="invite-card">
-    <div class="invite-icon">⚔️</div>
-    <div class="invite-text">
-      <strong id="invite-from-name">User</strong>
-      يتحداك في لعبة!
-    </div>
-    <div class="invite-actions">
-      <button id="invite-accept">قبول</button>
-      <button id="invite-reject">رفض</button>
-    </div>
-  </div>
-</div>
-
-<div class="overlay" id="confirm-modal">
-  <div class="confirm-card">
-    <div class="confirm-icon">⚠️</div>
-    <div class="confirm-text">
-      <strong>تصفير النتائج</strong>
-      هل أنت متأكد؟ لا يمكن التراجع.
-    </div>
-    <div class="confirm-actions">
-      <button id="confirm-yes">تأكيد</button>
-      <button id="confirm-no">إلغاء</button>
-    </div>
-  </div>
-</div>
-
-<div id="toast"></div>
 
 <script>
-/* ═══════════════════════════════════════════════════════════
-   Constants
-   ═══════════════════════════════════════════════════════════ */
 const BRAIN_URL = 'https://gist.githubusercontent.com/X5Coder/3c98d38e106fb1aba2a50b458df73545/raw/1b9d5aa0e220b3c17b72183287b201fbccff0377/gistfile1.txt';
-const SERVER_URL = 'https://script.google.com/macros/s/AKfycbxWpz0OHFFvts-Utnxd11qmV5pAzrahOB1i38BguNad6iAhhQR088pqdRY0ORQQv7VY/exec';
 const SCORES_KEY = 'xo_scores_v1';
-const USER_KEY = 'xo_user_v1';
-const FP_KEY = 'xo_fp_v1';
-const POLL_MS = 1500;
 
 const WIN_CONDS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-
-/* ═══════════════════════════════════════════════════════════
-   Helpers
-   ═══════════════════════════════════════════════════════════ */
-function $(id) { return document.getElementById(id); }
-function show(el) { el.classList.remove('hidden'); }
-function hide(el) { el.classList.add('hidden'); }
-
-function toast(msg, type) {
-  const t = $('toast');
-  t.textContent = msg;
-  t.className = 'show' + (type ? ' ' + type : '');
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => { t.className = ''; }, 2200);
-}
-
-function checkWin(b, p) {
+function checkWin(board, player) {
   for (const c of WIN_CONDS) {
-    if (b[c[0]] === p && b[c[1]] === p && b[c[2]] === p) return c;
-  }
-  return null;
-}
-function findWinCombo(str) {
-  for (const c of WIN_CONDS) {
-    const a = str.charAt(c[0]), b = str.charAt(c[1]), cc = str.charAt(c[2]);
-    if (a !== '.' && a === b && b === cc) return c;
+    if (board[c[0]] === player && board[c[1]] === player && board[c[2]] === player) return c;
   }
   return null;
 }
 
-function fingerprint() {
-  let fp = localStorage.getItem(FP_KEY);
-  if (fp) return fp;
-  const s = [
-    navigator.userAgent, navigator.language,
-    screen.width + 'x' + screen.height,
-    new Date().getTimezoneOffset(),
-    navigator.hardwareConcurrency || 0,
-    navigator.platform || ''
-  ].join('|');
-  let h = 5381;
-  for (let i = 0; i < s.length; i++) h = ((h << 5) + h) + s.charCodeAt(i);
-  fp = 'fp_' + (h >>> 0).toString(36) + '_' + Math.random().toString(36).slice(2, 8);
-  localStorage.setItem(FP_KEY, fp);
-  return fp;
-}
-
-function generateLocalId() {
-  const used = JSON.parse(localStorage.getItem('xo_used_ids') || '[]');
-  let id;
-  for (let i = 0; i < 100; i++) {
-    id = String(Math.floor(10000 + Math.random() * 90000));
-    if (!used.includes(id)) break;
-  }
-  used.push(id);
-  try { localStorage.setItem('xo_used_ids', JSON.stringify(used)); } catch (e) {}
-  return id;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   Server API
-   ═══════════════════════════════════════════════════════════ */
-async function apiGet(action, params) {
-  const q = new URLSearchParams(Object.assign({ action }, params || {}));
-  const res = await fetch(SERVER_URL + '?' + q.toString(), { method: 'GET', redirect: 'follow' });
-  const txt = await res.text();
-  let data;
-  try { data = JSON.parse(txt); }
-  catch (e) { throw new Error('Invalid response from server'); }
-  if (!data.ok) throw new Error(data.error || 'server error');
-  return data;
-}
-async function apiPost(action, body) {
-  const res = await fetch(SERVER_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(Object.assign({ action }, body || {})),
-    redirect: 'follow'
-  });
-  const txt = await res.text();
-  let data;
-  try { data = JSON.parse(txt); }
-  catch (e) { throw new Error('Invalid response from server'); }
-  if (!data.ok) throw new Error(data.error || 'server error');
-  return data;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   User Management
-   ═══════════════════════════════════════════════════════════ */
-let currentUser = { userId: null, username: null };
-let serverOnline = true;
-let lastServerCheck = 0;
-
-function saveUser() {
-  try { localStorage.setItem(USER_KEY, JSON.stringify(currentUser)); } catch (e) {}
-}
-function loadUser() {
-  try {
-    const raw = localStorage.getItem(USER_KEY);
-    if (!raw) return false;
-    const u = JSON.parse(raw);
-    if (u && u.userId && u.username) {
-      currentUser = { userId: String(u.userId), username: u.username };
-      return true;
-    }
-  } catch (e) {}
-  return false;
-}
-
-async function initUser() {
-  const fp = fingerprint();
-  let hasLocal = loadUser();
-
-  if (hasLocal) {
-    renderUserCard();
-    console.log('⚡ Loaded from cache:', currentUser.userId);
-  } else {
-    const tempId = generateLocalId();
-    currentUser.userId = tempId;
-    currentUser.username = 'User' + Math.floor(1000 + Math.random() * 9000);
-    saveUser();
-    renderUserCard();
-    console.log('⚡ Temp user created:', currentUser.userId);
-  }
-
-  syncWithServer(fp);
-}
-
-async function syncWithServer(fp) {
-  try {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 5000);
-
-    const r = await apiGet('register', {
-      fingerprint: fp,
-      username: currentUser.username
-    });
-    clearTimeout(timer);
-
-    const newId = String(r.userId);
-    const newName = r.username;
-
-    if (newId !== currentUser.userId || newName !== currentUser.username) {
-      currentUser.userId = newId;
-      currentUser.username = newName;
-      saveUser();
-      renderUserCard();
-      console.log('✓ Synced with server:', newId);
-    }
-    serverOnline = true;
-  } catch (e) {
-    console.warn('⚠ Server unavailable:', e.message);
-    serverOnline = false;
-  }
-}
-
-function renderUserCard() {
-  $('user-name-text').textContent = currentUser.username || '—';
-  $('user-id-text').textContent = currentUser.userId || '—';
-  $('user-avatar').textContent = (currentUser.username || '?').charAt(0).toUpperCase();
-}
-
-/* ═══════════════════════════════════════════════════════════
-   Brain (AI)
-   ═══════════════════════════════════════════════════════════ */
 const q = new Map();
 let gamesPlayed = 0;
-function getQ(s) { let v = q.get(s); if (!v) { v = new Float64Array(9); q.set(s, v); } return v; }
-function stateKey(board, p) {
+function getQ(state) {
+  let v = q.get(state);
+  if (!v) { v = new Float64Array(9); q.set(state, v); }
+  return v;
+}
+function stateKey(board, player) {
   let s = '';
   for (let i = 0; i < 9; i++) {
     const c = board[i];
     if (c === ' ') s += '.';
-    else if (c === p) s += 'X';
+    else if (c === player) s += 'X';
     else s += 'O';
   }
   return s;
 }
-function chooseAction(board, p, avail) {
-  const v = getQ(stateKey(board, p));
+function chooseAction(board, player, available) {
+  const v = getQ(stateKey(board, player));
   let bestQ = -Infinity, best = [];
-  for (const a of avail) {
+  for (const a of available) {
     if (v[a] > bestQ) { bestQ = v[a]; best = [a]; }
     else if (v[a] === bestQ) best.push(a);
   }
@@ -717,18 +364,16 @@ async function loadBrain() {
     const data = await res.json();
     if (!data.q) throw new Error('Invalid format');
     q.clear();
-    for (const k in data.q) q.set(k, Float64Array.from(data.q[k]));
+    for (const key in data.q) q.set(key, Float64Array.from(data.q[key]));
     gamesPlayed = data.gamesPlayed || 0;
+    console.log('Brain: ' + q.size + ' states');
     return true;
-  } catch (e) {
-    console.error('Brain failed:', e);
+  } catch (err) {
+    console.error('Brain failed:', err);
     return false;
   }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   Offline Game State
-   ═══════════════════════════════════════════════════════════ */
 const board = [' ',' ',' ',' ',' ',' ',' ',' ',' '];
 let turn = 'X';
 let playerSymbol = Math.random() < 0.5 ? 'X' : 'O';
@@ -739,47 +384,48 @@ let lastMove = -1;
 let winLine = null;
 let brainReady = false;
 let clearing = false;
+
 let roundStarter = Math.random() < 0.5 ? 'player' : 'ai';
 let nextStarter = null;
+
 turn = roundStarter === 'player' ? playerSymbol : aiSymbol;
 
-/* ═══════════════════════════════════════════════════════════
-   Online State
-   ═══════════════════════════════════════════════════════════ */
-let onlineMode = false;
-let onlineRoom = null;
-let onlineBoard = '.........';
-let onlineLastMove = -1;
-let onlineWinCombo = null;
-let pendingChallenge = null;
-let activeInvite = null;
-let pollTimer = null;
-
-/* ═══════════════════════════════════════════════════════════
-   Scores
-   ═══════════════════════════════════════════════════════════ */
 const scores = { win: 0, draw: 0, loss: 0 };
-const statEls = { win: $('s-win'), draw: $('s-draw'), loss: $('s-loss') };
-const countEls = { win: $('count-win'), draw: $('count-draw'), loss: $('count-loss') };
 
 function loadScores() {
   try {
     const raw = localStorage.getItem(SCORES_KEY);
     if (!raw) return;
-    const d = JSON.parse(raw);
-    if (typeof d.win === 'number') scores.win = d.win;
-    if (typeof d.draw === 'number') scores.draw = d.draw;
-    if (typeof d.loss === 'number') scores.loss = d.loss;
-  } catch (e) {}
+    const data = JSON.parse(raw);
+    if (typeof data.win === 'number')  scores.win  = data.win;
+    if (typeof data.draw === 'number') scores.draw = data.draw;
+    if (typeof data.loss === 'number') scores.loss = data.loss;
+  } catch (e) { }
 }
+
 function saveScores() {
-  try { localStorage.setItem(SCORES_KEY, JSON.stringify(scores)); } catch (e) {}
+  try {
+    localStorage.setItem(SCORES_KEY, JSON.stringify(scores));
+  } catch (e) { }
 }
+
+const statEls = {
+  win:  document.getElementById('s-win'),
+  draw: document.getElementById('s-draw'),
+  loss: document.getElementById('s-loss')
+};
+const countEls = {
+  win:  document.getElementById('count-win'),
+  draw: document.getElementById('count-draw'),
+  loss: document.getElementById('count-loss')
+};
+
 function paintScores() {
-  countEls.win.textContent = scores.win;
+  countEls.win.textContent  = scores.win;
   countEls.draw.textContent = scores.draw;
   countEls.loss.textContent = scores.loss;
 }
+
 function updateScore(type) {
   countEls[type].textContent = scores[type];
   saveScores();
@@ -790,14 +436,13 @@ function updateScore(type) {
   setTimeout(() => el.classList.remove('pulse'), 400);
 }
 
-/* ═══════════════════════════════════════════════════════════
-   Turn Badge
-   ═══════════════════════════════════════════════════════════ */
-const turnBadge = $('turn-badge');
+const turnBadge = document.getElementById('turn-badge');
 let badgeText = '';
+
 function setBadge(text, isYou) {
   if (badgeText === text && turnBadge.classList.contains('show')) {
-    turnBadge.classList.toggle('you', isYou); return;
+    turnBadge.classList.toggle('you', isYou);
+    return;
   }
   badgeText = text;
   turnBadge.textContent = text;
@@ -807,26 +452,18 @@ function setBadge(text, isYou) {
   void turnBadge.offsetWidth;
   turnBadge.classList.add('swap');
 }
+
 function hideBadge() {
   badgeText = '';
   turnBadge.classList.remove('show', 'swap', 'you');
 }
+
 function updateTurnBadge() {
-  if (onlineMode) return updateOnlineTurnBadge();
   if (!brainReady || gameOver || clearing) { hideBadge(); return; }
   if (turn === playerSymbol) setBadge('YOUR TURN', true);
-  else setBadge('AI PLAY', false);
-}
-function updateOnlineTurnBadge() {
-  if (!onlineRoom || onlineRoom.state !== 'playing') { hideBadge(); return; }
-  const myRole = onlineRoom.role === 'p1' ? '1' : '2';
-  if (onlineRoom.turn === myRole) setBadge('YOUR TURN', true);
-  else setBadge('OPPONENT', false);
+  else                        setBadge('AI PLAY',   false);
 }
 
-/* ═══════════════════════════════════════════════════════════
-   Marks
-   ═══════════════════════════════════════════════════════════ */
 function markX() {
   return '<div class="mark"><svg viewBox="0 0 100 100" fill="none">' +
     '<line x1="25" y1="25" x2="75" y2="75"/>' +
@@ -839,13 +476,11 @@ function markO() {
     '</svg></div>';
 }
 
-/* ═══════════════════════════════════════════════════════════
-   Board
-   ═══════════════════════════════════════════════════════════ */
-const gameEl = $('game');
-const winLineSvg = $('win-line');
+const gameEl = document.getElementById('game');
+const winLineSvg = document.getElementById('win-line');
 const winLineEl = winLineSvg.querySelector('line');
 const cells = [];
+
 for (let i = 0; i < 9; i++) {
   const cell = document.createElement('div');
   cell.className = 'cell';
@@ -855,66 +490,63 @@ for (let i = 0; i < 9; i++) {
   cells.push(cell);
 }
 
-function getActiveBoard() {
-  if (onlineMode) return onlineBoard.split('').map(c => c === '.' ? ' ' : c);
-  return board;
-}
-function getActiveLastMove() { return onlineMode ? onlineLastMove : lastMove; }
-function getActiveWinLine() { return onlineMode ? onlineWinCombo : winLine; }
-
 function render() {
-  const b = getActiveBoard();
-  const lm = getActiveLastMove();
-  const wl = getActiveWinLine();
   for (let i = 0; i < 9; i++) {
     const cell = cells[i];
-    const mark = b[i];
+    const mark = board[i];
     const wasX = cell.classList.contains('x');
     const wasO = cell.classList.contains('o');
     const isX = mark === 'X';
     const isO = mark === 'O';
+
     cell.classList.remove('x', 'o', 'taken', 'win', 'last');
+
     if (isX) cell.classList.add('x', 'taken');
     else if (isO) cell.classList.add('o', 'taken');
-    if (wl && wl.includes(i)) cell.classList.add('win');
-    else if (lm === i) cell.classList.add('last');
+
+    if (winLine && winLine.includes(i)) cell.classList.add('win');
+    else if (lastMove === i) cell.classList.add('last');
+
     if (isX && !wasX) cell.innerHTML = markX();
     else if (isO && !wasO) cell.innerHTML = markO();
     else if (!isX && !isO && (wasX || wasO)) cell.innerHTML = '';
   }
-  if (!onlineMode) {
-    gameEl.classList.toggle('ai-turn', !gameOver && !clearing && turn === aiSymbol);
-  } else {
-    gameEl.classList.remove('ai-turn');
-  }
+
+  gameEl.classList.toggle('ai-turn', !gameOver && !clearing && turn === aiSymbol);
   updateTurnBadge();
 }
 
-/* ═══════════════════════════════════════════════════════════
-   Win Line
-   ═══════════════════════════════════════════════════════════ */
 function showWinLine(combo) {
   const gameRect = gameEl.getBoundingClientRect();
   const r1 = cells[combo[0]].getBoundingClientRect();
   const r3 = cells[combo[2]].getBoundingClientRect();
+
   const p1 = [
-    (r1.left + r1.width / 2 - gameRect.left) / gameRect.width * 100,
-    (r1.top + r1.height / 2 - gameRect.top) / gameRect.height * 100
+    (r1.left + r1.width  / 2 - gameRect.left) / gameRect.width  * 100,
+    (r1.top  + r1.height / 2 - gameRect.top ) / gameRect.height * 100
   ];
   const p3 = [
-    (r3.left + r3.width / 2 - gameRect.left) / gameRect.width * 100,
-    (r3.top + r3.height / 2 - gameRect.top) / gameRect.height * 100
+    (r3.left + r3.width  / 2 - gameRect.left) / gameRect.width  * 100,
+    (r3.top  + r3.height / 2 - gameRect.top ) / gameRect.height * 100
   ];
+
   const dx = p3[0] - p1[0];
   const dy = p3[1] - p1[1];
   const ext = 0.12;
-  const x1 = p1[0] - dx * ext, y1 = p1[1] - dy * ext;
-  const x2 = p3[0] + dx * ext, y2 = p3[1] + dy * ext;
-  winLineEl.setAttribute('x1', x1); winLineEl.setAttribute('y1', y1);
-  winLineEl.setAttribute('x2', x2); winLineEl.setAttribute('y2', y2);
+  const x1 = p1[0] - dx * ext;
+  const y1 = p1[1] - dy * ext;
+  const x2 = p3[0] + dx * ext;
+  const y2 = p3[1] + dy * ext;
+
+  winLineEl.setAttribute('x1', x1);
+  winLineEl.setAttribute('y1', y1);
+  winLineEl.setAttribute('x2', x2);
+  winLineEl.setAttribute('y2', y2);
+
   const len = Math.hypot(x2 - x1, y2 - y1) * 1.5;
-  winLineEl.style.strokeDasharray = len;
+  winLineEl.style.strokeDasharray  = len;
   winLineEl.style.strokeDashoffset = len;
+
   winLineSvg.classList.remove('show');
   void winLineSvg.offsetWidth;
   winLineSvg.classList.add('show');
@@ -922,22 +554,33 @@ function showWinLine(combo) {
   void winLineEl.offsetWidth;
   winLineEl.style.animation = 'drawLine 0.3s ease-out forwards';
 }
+
 function hideWinLine() {
   winLineSvg.classList.remove('show');
   winLineEl.style.animation = 'none';
   winLineEl.style.strokeDashoffset = 500;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   Offline Game Logic
-   ═══════════════════════════════════════════════════════════ */
 function finishRound(result, winningCombo) {
   gameOver = true;
   aiThinking = false;
-  if (result === 'win') { scores.win++; updateScore('win'); nextStarter = 'player'; }
-  else if (result === 'loss') { scores.loss++; updateScore('loss'); nextStarter = 'ai'; }
-  else { scores.draw++; updateScore('draw'); nextStarter = roundStarter === 'player' ? 'ai' : 'player'; }
+
+  if (result === 'win') {
+    scores.win++;
+    updateScore('win');
+    nextStarter = 'player';
+  } else if (result === 'loss') {
+    scores.loss++;
+    updateScore('loss');
+    nextStarter = 'ai';
+  } else {
+    scores.draw++;
+    updateScore('draw');
+    nextStarter = roundStarter === 'player' ? 'ai' : 'player';
+  }
+
   render();
+
   if (winningCombo) {
     setTimeout(() => {
       winLine = winningCombo;
@@ -951,17 +594,19 @@ function finishRound(result, winningCombo) {
 }
 
 function onClick(i) {
-  if (onlineMode) return onOnlineClick(i);
   if (!brainReady || clearing) return;
   if (gameOver || aiThinking) return;
   if (turn !== playerSymbol) return;
   if (board[i] !== ' ') return;
+
   board[i] = playerSymbol;
   lastMove = i;
   render();
+
   const w = checkWin(board, playerSymbol);
   if (w) return finishRound('win', w);
   if (!board.includes(' ')) return finishRound('draw');
+
   turn = aiSymbol;
   aiThinking = true;
   render();
@@ -970,16 +615,20 @@ function onClick(i) {
 
 function aiPlay() {
   if (gameOver || clearing) { aiThinking = false; return; }
-  const avail = [];
-  for (let i = 0; i < 9; i++) if (board[i] === ' ') avail.push(i);
-  if (!avail.length) { aiThinking = false; return; }
-  const action = chooseAction(board, aiSymbol, avail);
+
+  const available = [];
+  for (let i = 0; i < 9; i++) if (board[i] === ' ') available.push(i);
+  if (!available.length) { aiThinking = false; return; }
+
+  const action = chooseAction(board, aiSymbol, available);
   board[action] = aiSymbol;
   lastMove = action;
   aiThinking = false;
+
   const w = checkWin(board, aiSymbol);
   if (w) return finishRound('loss', w);
   if (!board.includes(' ')) return finishRound('draw');
+
   turn = playerSymbol;
   render();
 }
@@ -987,546 +636,76 @@ function aiPlay() {
 function startClearSequence() {
   if (clearing) return;
   clearing = true;
+
   hideWinLine();
   gameEl.classList.remove('ai-turn');
   hideBadge();
+
   for (let i = 0; i < 9; i++) cells[i].classList.add('cell-out');
+
   setTimeout(() => {
     for (let i = 0; i < 9; i++) {
       board[i] = ' ';
       cells[i].className = 'cell cell-in';
       cells[i].innerHTML = '';
     }
+
     playerSymbol = Math.random() < 0.5 ? 'X' : 'O';
     aiSymbol = playerSymbol === 'X' ? 'O' : 'X';
-    if (nextStarter === 'player') turn = playerSymbol;
-    else if (nextStarter === 'ai') turn = aiSymbol;
-    else turn = Math.random() < 0.5 ? playerSymbol : aiSymbol;
+
+    if (nextStarter === 'player')      turn = playerSymbol;
+    else if (nextStarter === 'ai')     turn = aiSymbol;
+    else                                turn = Math.random() < 0.5 ? playerSymbol : aiSymbol;
+
     roundStarter = (turn === playerSymbol) ? 'player' : 'ai';
-    nextStarter = null;
-    gameOver = false; aiThinking = false; lastMove = -1; winLine = null; clearing = false;
+    nextStarter  = null;
+
+    gameOver    = false;
+    aiThinking  = false;
+    lastMove    = -1;
+    winLine     = null;
+    clearing    = false;
+
     gameEl.classList.toggle('ai-turn', turn === aiSymbol);
     updateTurnBadge();
+
     setTimeout(() => {
       for (let i = 0; i < 9; i++) cells[i].classList.remove('cell-in');
-      if (turn === aiSymbol) { aiThinking = true; setTimeout(aiPlay, 400); }
+
+      if (turn === aiSymbol) {
+        aiThinking = true;
+        setTimeout(aiPlay, 400);
+      }
     }, 380);
+
   }, 180);
 }
 
-/* ═══════════════════════════════════════════════════════════
-   Online Game Logic
-   ═══════════════════════════════════════════════════════════ */
-function switchToOnline(room) {
-  onlineMode = true;
-  onlineRoom = room;
-  onlineBoard = room.board || '.........';
-  onlineLastMove = room.lastMove === '' ? -1 : parseInt(room.lastMove, 10);
-  onlineWinCombo = null;
-  if (room.state === 'done') {
-    const c = findWinCombo(onlineBoard);
-    if (c) onlineWinCombo = c;
-  }
-  hide($('stats'));
-  show($('online-player-bar'));
-  updatePlayerBar();
-  render();
-  if (onlineWinCombo) setTimeout(() => showWinLine(onlineWinCombo), 100);
-  updateOnlineUI();
-}
+const modal = document.getElementById('settings-modal');
+const settingsBtn = document.getElementById('settings-btn');
+const resetBtn = document.getElementById('reset-scores');
 
-function switchToOffline() {
-  onlineMode = false;
-  onlineRoom = null;
-  onlineBoard = '.........';
-  onlineLastMove = -1;
-  onlineWinCombo = null;
-  hideWinLine();
-  show($('stats'));
-  hide($('online-player-bar'));
-  for (let i = 0; i < 9; i++) {
-    board[i] = ' ';
-    cells[i].className = 'cell';
-    cells[i].innerHTML = '';
-  }
-  gameOver = false; aiThinking = false; lastMove = -1; winLine = null; clearing = false;
-  turn = roundStarter === 'player' ? playerSymbol : aiSymbol;
-  render();
-  updateOnlineUI();
-}
-
-function updatePlayerBar() {
-  if (!onlineRoom) return;
-  const p1IsMe = onlineRoom.role === 'p1';
-  $('pb-p1-name').textContent = onlineRoom.p1Name || '—';
-  $('pb-p2-name').textContent = onlineRoom.p2Name || '—';
-  $('pb-p1').classList.toggle('you', p1IsMe);
-  $('pb-p2').classList.toggle('you', !p1IsMe);
-}
-
-async function loadOnlineScore(oppId) {
-  if (!oppId) return;
-  if (!serverOnline) {
-    $('pb-score').textContent = '0 - 0 - 0';
-    return;
-  }
-  try {
-    const r = await apiGet('getScores', { userA: currentUser.userId, userB: oppId });
-    const meIsA = String(r.userA) === String(currentUser.userId);
-    const myWins = meIsA ? r.winsA : r.winsB;
-    const myLosses = meIsA ? r.winsB : r.winsA;
-    $('pb-score').textContent = myWins + ' - ' + r.draws + ' - ' + myLosses;
-  } catch (e) {
-    $('pb-score').textContent = '0 - 0 - 0';
-  }
-}
-
-function onOnlineClick(i) {
-  if (!onlineRoom || onlineRoom.state !== 'playing') return;
-  const myRole = onlineRoom.role === 'p1' ? '1' : '2';
-  if (onlineRoom.turn !== myRole) return;
-  if (onlineBoard.charAt(i) !== '.') return;
-  const sym = myRole === '1' ? 'X' : 'O';
-  onlineBoard = onlineBoard.substring(0, i) + sym + onlineBoard.substring(i + 1);
-  onlineLastMove = i;
-  render();
-  sendMove(i);
-}
-
-async function sendMove(cell) {
-  if (!onlineRoom || !serverOnline) return;
-  try {
-    const r = await apiPost('move', {
-      userId: currentUser.userId,
-      roomId: onlineRoom.roomId,
-      cell: cell
-    });
-    applyRoomUpdate({
-      board: r.board,
-      turn: r.turn,
-      state: r.state,
-      winner: r.winner,
-      lastMove: String(cell)
-    });
-  } catch (e) {
-    toast(String(e.message || e), 'error');
-    pollRoomNow();
-  }
-}
-
-function applyRoomUpdate(r) {
-  if (!onlineMode || !onlineRoom) return;
-  onlineRoom.board = r.board;
-  onlineRoom.turn = r.turn;
-  onlineRoom.state = r.state;
-  onlineRoom.winner = r.winner;
-  onlineRoom.lastMove = r.lastMove;
-  onlineBoard = r.board;
-  onlineLastMove = r.lastMove === '' ? -1 : parseInt(r.lastMove, 10);
-  onlineWinCombo = null;
-  hideWinLine();
-  if (r.state === 'done') {
-    const c = findWinCombo(r.board);
-    if (c) {
-      onlineWinCombo = c;
-      setTimeout(() => {
-        render();
-        showWinLine(c);
-        const oppId = onlineRoom.role === 'p1' ? onlineRoom.p2Id : onlineRoom.p1Id;
-        setTimeout(() => { loadOnlineScore(oppId); }, 800);
-        setTimeout(() => { if (onlineMode) autoLeaveRoom(); }, 2400);
-      }, 200);
-    }
-  }
-  render();
-}
-
-async function leaveCurrentRoom(silent) {
-  if (!onlineRoom) return;
-  const rid = onlineRoom.roomId;
-  if (serverOnline) {
-    try { await apiPost('leaveRoom', { userId: currentUser.userId, roomId: rid }); } catch (e) {}
-  }
-  switchToOffline();
-  if (!silent) toast('تم الخروج من الغرفة');
-}
-
-async function autoLeaveRoom() {
-  if (!onlineRoom) return;
-  const rid = onlineRoom.roomId;
-  if (serverOnline) {
-    try { await apiPost('leaveRoom', { userId: currentUser.userId, roomId: rid }); } catch (e) {}
-  }
-  switchToOffline();
-  toast('انتهت الجولة');
-}
-
-/* ═══════════════════════════════════════════════════════════
-   Challenge
-   ═══════════════════════════════════════════════════════════ */
-async function sendChallenge(oppId) {
-  if (!currentUser.userId) {
-    toast('جاري تهيئة الحساب...', 'error');
-    return;
-  }
-  const id = (oppId || '').trim();
-  if (!id) {
-    toast('لازم تكتب كود', 'error');
-    return;
-  }
-  if (id === currentUser.userId) {
-    toast('لا يمكنك تحدّي نفسك', 'error');
-    return;
-  }
-  if (!serverOnline) {
-    toast('السيرفر غير متاح', 'error');
-    return;
-  }
-
-  const btn = $('send-challenge-btn');
-  btn.disabled = true;
-  btn.textContent = '...';
-
-  try {
-    const lookup = await apiGet('lookupUser', { userId: id });
-    if (!lookup.exists) {
-      toast('المستخدم غير موجود', 'error');
-      btn.disabled = false;
-      btn.textContent = 'تحدي';
-      return;
-    }
-
-    const r = await apiPost('sendInvite', {
-      from: currentUser.userId,
-      to: id
-    });
-
-    pendingChallenge = {
-      roomId: r.roomId,
-      inviteId: r.inviteId,
-      toUserId: id,
-      toName: lookup.username
-    };
-    $('challenge-target-name').textContent = lookup.username;
-    hide($('challenge-idle'));
-    show($('challenge-waiting'));
-    startPolling();
-    toast('تم إرسال التحدي ✓', 'success');
-    console.log('✓ Challenge sent to:', id, 'room:', r.roomId);
-  } catch (e) {
-    console.error('Challenge failed:', e);
-    toast(String(e.message || e), 'error');
-    btn.disabled = false;
-    btn.textContent = 'تحدي';
-  }
-}
-
-function cancelChallenge() {
-  pendingChallenge = null;
-  show($('challenge-idle'));
-  hide($('challenge-waiting'));
-  $('challenge-id-input').value = '';
-  const btn = $('send-challenge-btn');
-  btn.disabled = false;
-  btn.textContent = 'تحدي';
-}
-
-/* ═══════════════════════════════════════════════════════════
-   Invites
-   ═══════════════════════════════════════════════════════════ */
-function handleInvites(list) {
-  const btn = $('settings-btn');
-  const has = list && list.length > 0;
-  btn.classList.toggle('has-invite', has);
-
-  if (activeInvite) return;
-  if (!has) return;
-  if (onlineMode) return;
-  if (pendingChallenge) return;
-
-  const inv = list[0];
-  activeInvite = inv;
-  $('invite-from-name').textContent = inv.fromName || 'User';
-  $('invite-modal').classList.add('show');
-  console.log('📬 Invite received from:', inv.fromName);
-}
-
-async function respondInvite(accept) {
-  if (!activeInvite) return;
-  const inv = activeInvite;
-  activeInvite = null;
-  $('invite-modal').classList.remove('show');
-  if (!serverOnline) return;
-  try {
-    const r = await apiPost('respondInvite', {
-      inviteId: inv.inviteId,
-      accept: accept,
-      userId: currentUser.userId
-    });
-    if (accept && r.roomId) {
-      const roomState = await apiGet('getRoom', { roomId: r.roomId, userId: currentUser.userId });
-      if (!roomState.exists) throw new Error('room not found');
-      const fullRoom = Object.assign({}, roomState, { role: roomState.role });
-      switchToOnline(fullRoom);
-      const oppId = roomState.role === 'p1' ? roomState.p2Id : roomState.p1Id;
-      if (oppId) loadOnlineScore(oppId);
-      startPolling();
-      toast('تم قبول التحدي', 'success');
-    } else {
-      toast('تم رفض التحدي');
-    }
-  } catch (e) {
-    toast(String(e.message || e), 'error');
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   Polling
-   ═══════════════════════════════════════════════════════════ */
-function startPolling() {
-  if (pollTimer) return;
-  pollTimer = setInterval(pollAll, POLL_MS);
-}
-
-async function pollRoomNow() {
-  if (!onlineMode || !onlineRoom || !serverOnline) return;
-  try {
-    const r = await apiGet('getRoom', {
-      roomId: onlineRoom.roomId,
-      userId: currentUser.userId
-    });
-    if (!r.exists) { autoLeaveRoom(); return; }
-    onlineRoom.p1Name = r.p1Name;
-    onlineRoom.p2Name = r.p2Name;
-    onlineRoom.p1Id = r.p1Id;
-    onlineRoom.p2Id = r.p2Id;
-    onlineRoom.role = r.role;
-    updatePlayerBar();
-    if (r.board !== onlineRoom.board || r.state !== onlineRoom.state) {
-      if (r.state === 'waiting' && onlineRoom.state === 'playing') {
-        toast('الخصم خرج من الغرفة', 'error');
-        setTimeout(() => autoLeaveRoom(), 1200);
-        return;
-      }
-      applyRoomUpdate(r);
-    }
-  } catch (e) {}
-}
-
-async function pollAll() {
-  if (!currentUser.userId) return;
-
-  if (!serverOnline) {
-    if (Date.now() - lastServerCheck < 10000) return;
-    lastServerCheck = Date.now();
-    try {
-      await apiGet('ping');
-      serverOnline = true;
-      syncWithServer(fingerprint());
-      toast('تم الاتصال بالسيرفر', 'success');
-    } catch (e) { return; }
-  }
-
-  try {
-    const inv = await apiGet('getInvites', { userId: currentUser.userId });
-    handleInvites(inv.invites || []);
-  } catch (e) {
-    serverOnline = false;
-    return;
-  }
-
-  if (onlineMode && onlineRoom) {
-    await pollRoomNow();
-  }
-
-  if (pendingChallenge) {
-    try {
-      const r = await apiGet('getRoom', {
-        roomId: pendingChallenge.roomId,
-        userId: currentUser.userId
-      });
-      if (r.exists && r.state === 'playing') {
-        const fullRoom = Object.assign({}, r, { role: r.role });
-        pendingChallenge = null;
-        show($('challenge-idle'));
-        hide($('challenge-waiting'));
-        switchToOnline(fullRoom);
-        const oppId = r.role === 'p1' ? r.p2Id : r.p1Id;
-        if (oppId) loadOnlineScore(oppId);
-        toast('تم قبول التحدي! 🎮', 'success');
-        closeSettings();
-      }
-    } catch (e) {}
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   Settings UI
-   ═══════════════════════════════════════════════════════════ */
-function updateOnlineUI() {
-  const inRoom = onlineMode && onlineRoom;
-  const inChallenge = !!pendingChallenge;
-  if (inRoom) {
-    hide($('challenge-section'));
-    $('in-room-section').style.display = 'block';
-    $('room-id-label').textContent = onlineRoom.roomId;
-  } else if (inChallenge) {
-    hide($('challenge-section'));
-    $('in-room-section').style.display = 'none';
-  } else {
-    show($('challenge-section'));
-    $('in-room-section').style.display = 'none';
-  }
-}
-
-function openSettings() {
-  updateOnlineUI();
-  $('settings-modal').classList.add('show');
-}
-function closeSettings() {
-  $('settings-modal').classList.remove('show');
-}
-
-/* ═══════════════════════════════════════════════════════════
-   Wire Up
-   ═══════════════════════════════════════════════════════════ */
-$('settings-btn').addEventListener('click', openSettings);
-$('settings-modal').addEventListener('click', (e) => {
-  if (e.target === $('settings-modal')) closeSettings();
+settingsBtn.addEventListener('click', () => {
+  document.getElementById('setting-states').textContent = q.size.toLocaleString();
+  document.getElementById('setting-games').textContent  = gamesPlayed.toLocaleString();
+  document.getElementById('setting-status').textContent = brainReady ? 'جاهز' : 'جاري التحميل';
+  modal.classList.add('show');
+});
+modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('show'); });
+resetBtn.addEventListener('click', () => {
+  scores.win = 0; scores.draw = 0; scores.loss = 0;
+  saveScores();
+  paintScores();
 });
 
-$('user-name-display').addEventListener('click', () => {
-  if (!currentUser.userId) { toast('جاري تهيئة الحساب...', 'error'); return; }
-  const display = $('user-name-display');
-  const current = currentUser.username;
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.className = 'user-name-input';
-  input.value = current;
-  input.maxLength = 20;
-  display.replaceWith(input);
-  input.focus();
-  input.select();
-  let done = false;
-  const finish = async (save) => {
-    if (done) return;
-    done = true;
-    const newName = input.value.trim();
-    const newDisplay = document.createElement('div');
-    newDisplay.className = 'user-name';
-    newDisplay.id = 'user-name-display';
-    newDisplay.innerHTML = '<span id="user-name-text">' + (currentUser.username || '—') +
-      '</span><span class="edit-ico">✎</span>';
-    input.replaceWith(newDisplay);
-    bindNameEdit();
-    if (save && newName && newName !== current) {
-      currentUser.username = newName;
-      saveUser();
-      renderUserCard();
-      if (serverOnline) {
-        try {
-          await apiPost('updateUsername', { userId: currentUser.userId, username: newName });
-          toast('تم تحديث الاسم', 'success');
-        } catch (e) { toast(String(e.message || e), 'error'); }
-      } else {
-        toast('تم التحديث محلياً', 'success');
-      }
-    }
-  };
-  input.addEventListener('blur', () => finish(true));
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
-    if (e.key === 'Escape') { done = true; input.value = current; input.blur(); }
-  });
-});
-
-function bindNameEdit() {
-  const display = $('user-name-display');
-  if (!display) return;
-  const fresh = display.cloneNode(true);
-  display.parentNode.replaceChild(fresh, display);
-  fresh.addEventListener('click', () => $('user-name-display').click());
-}
-
-$('user-id-display').addEventListener('click', async () => {
-  if (!currentUser.userId) return;
-  const el = $('user-id-display');
-  try {
-    await navigator.clipboard.writeText(currentUser.userId);
-    el.classList.add('copied');
-    toast('تم نسخ الـ ID', 'success');
-    setTimeout(() => el.classList.remove('copied'), 1200);
-  } catch (e) {
-    const ta = document.createElement('textarea');
-    ta.value = currentUser.userId;
-    document.body.appendChild(ta);
-    ta.select();
-    try { document.execCommand('copy'); toast('تم نسخ الـ ID', 'success'); } catch (er) {}
-    document.body.removeChild(ta);
-  }
-});
-
-$('leave-room-btn').addEventListener('click', () => leaveCurrentRoom(false));
-
-$('send-challenge-btn').addEventListener('click', () => {
-  sendChallenge($('challenge-id-input').value);
-});
-$('challenge-id-input').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') sendChallenge($('challenge-id-input').value);
-});
-$('challenge-id-input').addEventListener('input', (e) => {
-  e.target.value = e.target.value.replace(/\D/g, '').slice(0, 5);
-});
-
-$('cancel-challenge-btn').addEventListener('click', cancelChallenge);
-$('invite-accept').addEventListener('click', () => respondInvite(true));
-$('invite-reject').addEventListener('click', () => respondInvite(false));
-
-$('reset-scores').addEventListener('click', () => {
-  $('confirm-modal').classList.add('show');
-});
-$('confirm-no').addEventListener('click', () => {
-  $('confirm-modal').classList.remove('show');
-});
-$('confirm-yes').addEventListener('click', () => {
-  const card = document.querySelector('.confirm-card');
-  card.classList.add('shake');
-  setTimeout(() => {
-    card.classList.remove('shake');
-    scores.win = 0; scores.draw = 0; scores.loss = 0;
-    saveScores();
-    paintScores();
-    $('confirm-modal').classList.remove('show');
-    toast('تم تصفير النتائج', 'success');
-  }, 420);
-});
-$('confirm-modal').addEventListener('click', (e) => {
-  if (e.target === $('confirm-modal')) $('confirm-modal').classList.remove('show');
-});
-
-/* ═══════════════════════════════════════════════════════════
-   Init
-   ═══════════════════════════════════════════════════════════ */
 loadScores();
 paintScores();
 render();
-updateOnlineUI();
-
 loadBrain().then(ok => {
   brainReady = true;
-  console.log(ok ? '✓ Brain ready' : '⚠ Playing without brain');
+  console.log(ok ? 'Ready' : 'Playing without brain');
   updateTurnBadge();
-  if (roundStarter === 'ai' && !gameOver) {
-    aiThinking = true;
-    setTimeout(aiPlay, 600);
-  }
 });
-
-initUser();
-
-setTimeout(() => {
-  startPolling();
-}, 1000);
 </script>
 </body>
 </html>
