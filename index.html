@@ -587,7 +587,10 @@ function generateLocalId() {
 async function apiGet(action, params) {
   const q = new URLSearchParams(Object.assign({ action }, params || {}));
   const res = await fetch(SERVER_URL + '?' + q.toString(), { method: 'GET', redirect: 'follow' });
-  const data = await res.json();
+  const txt = await res.text();
+  let data;
+  try { data = JSON.parse(txt); }
+  catch (e) { throw new Error('Invalid response from server'); }
   if (!data.ok) throw new Error(data.error || 'server error');
   return data;
 }
@@ -598,13 +601,16 @@ async function apiPost(action, body) {
     body: JSON.stringify(Object.assign({ action }, body || {})),
     redirect: 'follow'
   });
-  const data = await res.json();
+  const txt = await res.text();
+  let data;
+  try { data = JSON.parse(txt); }
+  catch (e) { throw new Error('Invalid response from server'); }
   if (!data.ok) throw new Error(data.error || 'server error');
   return data;
 }
 
 /* ═══════════════════════════════════════════════════════════
-   User Management (with fallback)
+   User Management
    ═══════════════════════════════════════════════════════════ */
 let currentUser = { userId: null, username: null };
 let serverOnline = true;
@@ -629,35 +635,47 @@ function loadUser() {
 async function initUser() {
   const fp = fingerprint();
   let hasLocal = loadUser();
-  if (hasLocal) renderUserCard();
 
+  if (hasLocal) {
+    renderUserCard();
+    console.log('⚡ Loaded from cache:', currentUser.userId);
+  } else {
+    const tempId = generateLocalId();
+    currentUser.userId = tempId;
+    currentUser.username = 'User' + Math.floor(1000 + Math.random() * 9000);
+    saveUser();
+    renderUserCard();
+    console.log('⚡ Temp user created:', currentUser.userId);
+  }
+
+  syncWithServer(fp);
+}
+
+async function syncWithServer(fp) {
   try {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 5000);
+
     const r = await apiGet('register', {
       fingerprint: fp,
-      username: hasLocal ? currentUser.username : ''
+      username: currentUser.username
     });
     clearTimeout(timer);
-    currentUser.userId = String(r.userId);
-    currentUser.username = r.username;
-    saveUser();
-    renderUserCard();
-    serverOnline = true;
-    console.log('✓ Server register OK:', currentUser.userId);
-  } catch (e) {
-    console.warn('Server unavailable, using local fallback:', e.message);
-    serverOnline = false;
 
-    if (!hasLocal) {
-      const localId = generateLocalId();
-      currentUser.userId = localId;
-      currentUser.username = 'User' + Math.floor(1000 + Math.random() * 9000);
+    const newId = String(r.userId);
+    const newName = r.username;
+
+    if (newId !== currentUser.userId || newName !== currentUser.username) {
+      currentUser.userId = newId;
+      currentUser.username = newName;
       saveUser();
       renderUserCard();
-      console.log('⚠ Local fallback user:', currentUser.userId);
-      toast('وضع محلي - السيرفر غير متاح', 'error');
+      console.log('✓ Synced with server:', newId);
     }
+    serverOnline = true;
+  } catch (e) {
+    console.warn('⚠ Server unavailable:', e.message);
+    serverOnline = false;
   }
 }
 
@@ -1164,10 +1182,25 @@ async function sendChallenge(oppId) {
     toast('السيرفر غير متاح', 'error');
     return;
   }
+
+  const btn = $('send-challenge-btn');
+  btn.disabled = true;
+  btn.textContent = '...';
+
   try {
     const lookup = await apiGet('lookupUser', { userId: id });
-    if (!lookup.exists) { toast('المستخدم غير موجود', 'error'); return; }
-    const r = await apiPost('sendInvite', { from: currentUser.userId, to: id });
+    if (!lookup.exists) {
+      toast('المستخدم غير موجود', 'error');
+      btn.disabled = false;
+      btn.textContent = 'تحدي';
+      return;
+    }
+
+    const r = await apiPost('sendInvite', {
+      from: currentUser.userId,
+      to: id
+    });
+
     pendingChallenge = {
       roomId: r.roomId,
       inviteId: r.inviteId,
@@ -1178,9 +1211,13 @@ async function sendChallenge(oppId) {
     hide($('challenge-idle'));
     show($('challenge-waiting'));
     startPolling();
-    toast('تم إرسال التحدي', 'success');
+    toast('تم إرسال التحدي ✓', 'success');
+    console.log('✓ Challenge sent to:', id, 'room:', r.roomId);
   } catch (e) {
+    console.error('Challenge failed:', e);
     toast(String(e.message || e), 'error');
+    btn.disabled = false;
+    btn.textContent = 'تحدي';
   }
 }
 
@@ -1189,6 +1226,9 @@ function cancelChallenge() {
   show($('challenge-idle'));
   hide($('challenge-waiting'));
   $('challenge-id-input').value = '';
+  const btn = $('send-challenge-btn');
+  btn.disabled = false;
+  btn.textContent = 'تحدي';
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1198,14 +1238,17 @@ function handleInvites(list) {
   const btn = $('settings-btn');
   const has = list && list.length > 0;
   btn.classList.toggle('has-invite', has);
+
   if (activeInvite) return;
   if (!has) return;
   if (onlineMode) return;
   if (pendingChallenge) return;
+
   const inv = list[0];
   activeInvite = inv;
   $('invite-from-name').textContent = inv.fromName || 'User';
   $('invite-modal').classList.add('show');
+  console.log('📬 Invite received from:', inv.fromName);
 }
 
 async function respondInvite(accept) {
@@ -1279,7 +1322,7 @@ async function pollAll() {
     try {
       await apiGet('ping');
       serverOnline = true;
-      await initUser();
+      syncWithServer(fingerprint());
       toast('تم الاتصال بالسيرفر', 'success');
     } catch (e) { return; }
   }
@@ -1287,7 +1330,10 @@ async function pollAll() {
   try {
     const inv = await apiGet('getInvites', { userId: currentUser.userId });
     handleInvites(inv.invites || []);
-  } catch (e) { serverOnline = false; }
+  } catch (e) {
+    serverOnline = false;
+    return;
+  }
 
   if (onlineMode && onlineRoom) {
     await pollRoomNow();
@@ -1307,7 +1353,7 @@ async function pollAll() {
         switchToOnline(fullRoom);
         const oppId = r.role === 'p1' ? r.p2Id : r.p1Id;
         if (oppId) loadOnlineScore(oppId);
-        toast('تم قبول التحدي!', 'success');
+        toast('تم قبول التحدي! 🎮', 'success');
         closeSettings();
       }
     } catch (e) {}
@@ -1470,20 +1516,17 @@ loadBrain().then(ok => {
   brainReady = true;
   console.log(ok ? '✓ Brain ready' : '⚠ Playing without brain');
   updateTurnBadge();
-  if (roundStarter === 'ai') {
+  if (roundStarter === 'ai' && !gameOver) {
     aiThinking = true;
     setTimeout(aiPlay, 600);
   }
 });
 
-initUser().then(() => {
-  const pollWatch = setInterval(() => {
-    if (currentUser.userId) {
-      clearInterval(pollWatch);
-      startPolling();
-    }
-  }, 500);
-});
+initUser();
+
+setTimeout(() => {
+  startPolling();
+}, 1000);
 </script>
 </body>
 </html>
